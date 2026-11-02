@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JM STORE</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">🏪</div>
+    <div>
+      <h1>JM STORE</h1>
+      <p>BASTA DIRI BRATO!!</p>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="active" data-page="pos">🛒 POS</button>
+    <button data-page="transactions">📋 Transactions</button>
+    <button data-page="reports">📊 Reports</button>
+  </nav>
+  <div class="clockbox">
+    <span id="dateNow">📅 --</span>
+    <span id="timeNow">🕒 --</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- POS PAGE -->
+  <div class="page active" id="page-pos">
+    <div class="grid">
+
+      <!-- Product catalog -->
+      <div class="card">
+        <h2>Product Catalog</h2>
+        <div class="search-row">
+          <input type="text" id="searchInput" placeholder="Search product name...">
+          <button onclick="renderProducts()">🔍</button>
+        </div>
+        <div class="filter-row">
+          <select id="priceFilter" onchange="renderProducts()">
+            <option value="all">Price: All</option>
+            <option value="0-100">₱0 - ₱100</option>
+            <option value="100-200">₱100 - ₱200</option>
+            <option value="200-300">₱200 - ₱300</option>
+            <option value="300-9999">₱300+</option>
+          </select>
+          <button onclick="clearFilters()">Clear</button>
+        </div>
+        <div class="product-list" id="productList"></div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+
+      <!-- Current sale -->
+      <div class="card">
+        <h2>Current Sale</h2>
+        <div class="cart-actions">
+          <button class="btn-outline-red" onclick="clearCart()">🗑 Clear Cart</button>
+        </div>
+        <div id="cartTableWrap">
+          <div class="empty-cart">Cart is empty — add a product to start a sale.</div>
+        </div>
+        <div class="totals" id="totalsBox"></div>
+      </div>
+
+      <!-- Payment / Receipt -->
+      <div> 
+        <div class="card" style="margin-bottom:18px;">
+          <h2>Payment</h2>
+          <div class="field">
+            <label>Customer Name (Optional)</label>
+            <input type="text" id="customerName" placeholder="Enter customer name">
+          </div>
+          <div class="field">
+            <label>Amount Paid (₱)</label>
+            <input type="number" id="amountPaid" placeholder="0" oninput="updateChange()">
+          </div>
+          <div class="change-box">
+            <div class="lbl">Change</div>
+            <div class="amt" id="changeAmt">₱0.00</div>
+          </div>
+          <button class="complete-btn" id="completeBtn" onclick="completeTransaction()">✅ Complete Transaction</button>
+          <div class="quick-actions">
+            <div>🏷️ Discount<br>10% off over ₱1000</div>
+            <div>🖨️ Receipt<br>Auto-generated</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Receipt Preview</h2>
+          <div class="receipt" id="receiptBox">
+            <p style="text-align:center;color:var(--ink-soft);font-size:12px;">No transaction yet. Complete a sale to preview the receipt here.</p>
+          </div>
+          <button class="print-btn" id="printBtn" onclick="printReceipt()" style="display:none;">🖨️ PRINT RECEIPT</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent transactions + quick reports -->
+    <div class="grid" style="margin-top:18px;grid-template-columns:1.3fr 2fr;">
+      <div class="card">
+        <h2>Quick Reports (Today)</h2>
+        <div class="stats-grid" id="quickStats"></div>
+        <button class="view-all-btn" onclick="switchPage('transactions')">View All Transactions</button>
+      </div>
+      <div class="card">
+        <h2>Recent Transactions</h2>
+        <table class="tx-table" id="recentTxTable">
+          <thead><tr><th>ID</th><th>Date</th><th>Customer</th><th>Items</th><th>Total Paid</th><th>Change</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="howto">
+      <h2>How to Use</h2>
+      <ol>
+        <li>Select a product from the catalog or search for it.</li>
+        <li>Click "+ Add" to add it to the current sale, adjust quantity with +/-.</li>
+        <li>Review items and total amount due.</li>
+        <li>Enter payment amount and click "Complete Transaction".</li>
+        <li>View transactions and reports anytime from the tabs above.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- TRANSACTIONS PAGE -->
+  <div class="page" id="page-transactions">
+    <div class="card">
+      <h2>All Transactions</h2>
+      <table class="tx-table" id="allTxTable">
+        <thead><tr><th>Transaction ID</th><th>Date</th><th>Customer</th><th>Items</th><th>Total Paid</th><th>Change</th><th>Action</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- REPORTS PAGE -->
+  <div class="page" id="page-reports">
+    <div class="card">
+      <h2>Sales Reports</h2>
+      <div class="stats-grid" id="reportStats" style="margin-bottom:16px;"></div>
+      <h2>Product Sales Breakdown</h2>
+      <table class="tx-table" id="reportTable">
+        <thead><tr><th>Product</th><th>Qty Sold</th><th>Revenue</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
